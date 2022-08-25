@@ -37,24 +37,16 @@ const ancientsContainer = document.querySelector(".ancients-container");
 const ancientCard = ancientsContainer.querySelectorAll(".ancient-card");
 
 ancientsContainer.addEventListener("click", (e) => {
-  for (let i = 0; i < ancientCard.length; i++) {
-    ancientCard[i].classList.remove("active");
-  }
+  deleteAncientActive()
   deleteDiffActive();
   ancientNumber = e.target.dataset.number;
   e.target.classList.add("active");
   console.log("e.target", e.target);
   console.log("ancientNumber", ancientNumber);
-  // changeAncient();
 });
+
 const difficultyContainer = document.querySelector(".difficulty-container");
 const difficultyCard = difficultyContainer.querySelectorAll(".difficulty");
-function deleteDiffActive() {
-  for (let i = 0; i < difficultyCard.length; i++) {
-    difficultyCard[i].classList.remove("active");
-  }
-}
-
 difficultyContainer.addEventListener("click", (e) => {
   deleteDiffActive();
   let difficultyNumber = e.target.dataset.level;
@@ -63,6 +55,18 @@ difficultyContainer.addEventListener("click", (e) => {
   console.log("difficultyNumber", difficultyNumber);
   changeAncient();
 });
+
+function deleteDiffActive() {
+  for (let i = 0; i < difficultyCard.length; i++) {
+    difficultyCard[i].classList.remove("active");
+  }
+}
+
+function deleteAncientActive() {
+  for (let i = 0; i < ancientCard.length; i++) {
+    ancientCard[i].classList.remove("active");
+  }
+}
 
 let finalDeck;
 function changeAncient() {
@@ -126,7 +130,8 @@ function insertNumberInDot(arrStagesLine, dotsStage) {
 function getQuantityCardСolumn(arr, columnNumber) {
   return arr.reduce((acc, currentValue) => acc + currentValue[columnNumber], 0);
 }
-
+//исплльзует внешние переменные finalDeck-финальная колода и lastCard-выбираемая карта,
+// dotsStage1,dotsStage2,dotsStage3
 function nextCard() {
   if (finalDeck.length === 0) {
     lastCard.style.backgroundImage = "";
@@ -135,7 +140,7 @@ function nextCard() {
   const objCard = finalDeck.pop();
 
   lastCard.style.backgroundImage = objCard.cardFace;
-  console.log(objCard.color);
+  console.log("objCard.color", objCard.color);
 
   if (objCard.color == "green") {
     if (+dotsStage1[0].textContent) {
@@ -167,26 +172,6 @@ function nextCard() {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // const blueCardsData = [
 //     {
 //       id: 'blue1',
@@ -205,4 +190,3 @@ function nextCard() {
 //         [2, 0, 4],
 //       ],
 //     },
-
