@@ -7,6 +7,14 @@ import { greenCardsData } from "../data/mythicCards/green/index.js";
 import { ancientsData } from "../data/ancients.js";
 // console.log("ancientsData", ancientsData);
 
+let greenCardsDiff;
+let brownCardsDiff;
+let blueCardsDiff;
+
+let quantityGreenCard;
+let quantityBrownCard;
+let quantityBlueCard;
+
 const dotsStage1 = document.querySelectorAll(".dot-stage1");
 const dotsStage2 = document.querySelectorAll(".dot-stage2");
 const dotsStage3 = document.querySelectorAll(".dot-stage3");
@@ -15,7 +23,7 @@ const lastCard = document.querySelector(".last-card");
 const cardBack = document.querySelector(".deck");
 cardBack.addEventListener("click", nextCard);
 
-let ancientNumber = 0;
+let ancientNumber;
 
 function shuffle(array) {
   array.sort(() => Math.random() - 0.5);
@@ -36,24 +44,51 @@ ShubNiggurath.style.backgroundImage = ancientsData[3].cardFace;
 const ancientsContainer = document.querySelector(".ancients-container");
 const ancientCard = ancientsContainer.querySelectorAll(".ancient-card");
 
+let objFromAncient;
 ancientsContainer.addEventListener("click", (e) => {
-  deleteAncientActive()
+  deleteAncientActive();
   deleteDiffActive();
   ancientNumber = e.target.dataset.number;
   e.target.classList.add("active");
-  console.log("e.target", e.target);
+  // console.log("e.target", e.target);
   console.log("ancientNumber", ancientNumber);
+
+  objFromAncient = ancientsData[+ancientNumber];
+  console.log("objFromAncient", objFromAncient);
+
+  quantityGreenCard = getQuantityCardСolumn(objFromAncient.stages, 0);
+  quantityBrownCard = getQuantityCardСolumn(objFromAncient.stages, 1);
+  quantityBlueCard = getQuantityCardСolumn(objFromAncient.stages, 2);
+  console.log("quantityGreenCard!!!!", quantityGreenCard);
 });
 
 const difficultyContainer = document.querySelector(".difficulty-container");
 const difficultyCard = difficultyContainer.querySelectorAll(".difficulty");
+let difficultyNumber;
 difficultyContainer.addEventListener("click", (e) => {
   deleteDiffActive();
-  let difficultyNumber = e.target.dataset.level;
+  difficultyNumber = +e.target.dataset.level;
   e.target.classList.add("active");
   console.log("e.target", e.target);
   console.log("difficultyNumber", difficultyNumber);
-  changeAncient();
+
+  greenCardsDiff = choiceDifficultyOfDeck(
+    difficultyNumber,
+    greenCardsData,
+    quantityGreenCard
+  );
+  console.log("greenCardsDiff", greenCardsDiff, difficultyNumber);
+  brownCardsDiff = choiceDifficultyOfDeck(
+    difficultyNumber,
+    brownCardsData,
+    quantityBrownCard
+  );
+  blueCardsDiff = choiceDifficultyOfDeck(
+    difficultyNumber,
+    blueCardsData,
+    quantityBlueCard
+  );
+  changeDifficulty();
 });
 
 function deleteDiffActive() {
@@ -68,57 +103,98 @@ function deleteAncientActive() {
   }
 }
 
+let greenCardDeck;
+let brownCardDeck;
+let blueCardDeck;
 let finalDeck;
-function changeAncient() {
-  let objFromAncient = ancientsData[+ancientNumber];
-  console.log("objFromAncient", objFromAncient);
 
-  const quantityGreenCard = getQuantityCardСolumn(objFromAncient.stages, 0);
-  const quantityBrownCard = getQuantityCardСolumn(objFromAncient.stages, 1);
-  const quantityBlueCard = getQuantityCardСolumn(objFromAncient.stages, 2);
-  console.log("quantityGreenCard", quantityGreenCard);
-
-  shuffle(greenCardsData);
-  const greenCardDeck = greenCardsData.slice(0, quantityGreenCard);
-  console.log("greenCardDeck", greenCardDeck);
-
-  shuffle(brownCardsData);
-  const brownCardDeck = brownCardsData.slice(0, quantityBrownCard);
-  console.log("brownCardsData", brownCardDeck);
-
-  shuffle(blueCardsData);
-  const blueCardDeck = blueCardsData.slice(0, quantityBlueCard);
-  console.log("blueCardDeck", blueCardDeck);
-
-  function getStageDeck(arrStagesLine) {
-    const y = [];
-    shuffle(greenCardDeck);
-    shuffle(brownCardDeck);
-    shuffle(blueCardDeck);
-    for (let i = 0; i < arrStagesLine[0]; i++) {
-      y.push(greenCardDeck.pop());
-    }
-    for (let i = 0; i < arrStagesLine[1]; i++) {
-      y.push(brownCardDeck.pop());
-    }
-    for (let i = 0; i < arrStagesLine[2]; i++) {
-      y.push(blueCardDeck.pop());
-    }
-    shuffle(y);
-    console.log("y----", y);
-    return y;
-  }
+function changeDifficulty() {
+  doCardDeck();
 
   let DeckStage1 = [...getStageDeck(objFromAncient.stages[0])];
   let DeckStage2 = [...getStageDeck(objFromAncient.stages[1])];
   let DeckStage3 = [...getStageDeck(objFromAncient.stages[2])];
 
-  finalDeck = [...DeckStage1, ...DeckStage2, ...DeckStage3].reverse();
+  finalDeck = [...DeckStage3, ...DeckStage2, ...DeckStage1];
   console.log("finalDecks", finalDeck, DeckStage1, DeckStage2, DeckStage3);
 
   insertNumberInDot(objFromAncient.stages[0], dotsStage1);
   insertNumberInDot(objFromAncient.stages[1], dotsStage2);
   insertNumberInDot(objFromAncient.stages[2], dotsStage3);
+}
+
+function choiceDifficultyOfDeck(diffNumber, arrDeck, needQtyCard) {
+  console.log("diffNumber---------", diffNumber);
+  let diff1 = 0;
+  let diff2 = 0;
+  let diff3 = 0;
+  let arr2 = [];
+  if (diffNumber === 3) {
+    diff1 = "normal";
+    diff2 = "easy";
+    diff3 = "hard";
+  } else if (diffNumber > 3) {
+    diff1 = "normal";
+    diff2 = "";
+    diff3 = "hard";
+  } else if (diffNumber < 3) {
+    diff1 = "normal";
+    diff2 = "easy";
+    diff3 = "";
+  }
+
+  const arr = arrDeck.filter(
+    (item) =>
+      item.difficulty === diff1 ||
+      item.difficulty === diff2 ||
+      item.difficulty === diff3
+  );
+  if (diffNumber >3 && arr.length < needQtyCard) {
+    arr2 = arrDeck.filter((item) => item.difficulty === "easy");
+    shuffle(arr2);
+    while (arr.length < needQtyCard) {
+      arr.push(arr2.pop());
+    }
+  } else if (diffNumber <3 && arr.length < needQtyCard) {
+    arr2 = arrDeck.filter((item) => item.difficulty === "hard");
+    shuffle(arr2);
+    while (arr.length < needQtyCard) {
+      arr.push(arr2.pop());
+    }
+  }
+  return arr;
+}
+
+function doCardDeck() {
+  shuffle(greenCardsDiff);
+  greenCardDeck = greenCardsDiff.slice(0, quantityGreenCard);
+  // console.log("greenCardDeck", greenCardDeck);
+
+  shuffle(brownCardsDiff);
+  brownCardDeck = brownCardsDiff.slice(0, quantityBrownCard);
+  // console.log("brownCardsData", brownCardDeck);
+
+  shuffle(blueCardsDiff);
+  blueCardDeck = blueCardsDiff.slice(0, quantityBlueCard);
+  // console.log("blueCardDeck", blueCardDeck);
+}
+
+function getStageDeck(arrStagesLine) {
+  const y = [];
+  shuffle(greenCardDeck);
+  shuffle(brownCardDeck);
+  shuffle(blueCardDeck);
+  for (let i = 0; i < arrStagesLine[0]; i++) {
+    y.push(greenCardDeck.pop());
+  }
+  for (let i = 0; i < arrStagesLine[1]; i++) {
+    y.push(brownCardDeck.pop());
+  }
+  for (let i = 0; i < arrStagesLine[2]; i++) {
+    y.push(blueCardDeck.pop());
+  }
+  shuffle(y);
+  return y;
 }
 
 function insertNumberInDot(arrStagesLine, dotsStage) {
@@ -140,7 +216,12 @@ function nextCard() {
   const objCard = finalDeck.pop();
 
   lastCard.style.backgroundImage = objCard.cardFace;
-  console.log("objCard.color", objCard.color);
+  console.log(
+    "objCard.id-color-difficulty",
+    objCard.id,
+    objCard.color,
+    objCard.difficulty
+  );
 
   if (objCard.color == "green") {
     if (+dotsStage1[0].textContent) {
@@ -172,21 +253,3 @@ function nextCard() {
   }
 }
 
-// const blueCardsData = [
-//     {
-//       id: 'blue1',
-//       cardFace: "url(/assets/MythicCards/blue/blue1.png)",
-//       difficulty: 'hard',
-//       color:'blue'
-//     },
-
-//   const ancientsData = [
-//     {
-//       name: "azathoth",
-//       cardFace: "url(/assets/Ancients/Azathoth.png)",
-//       stages: [
-//         [1, 1, 2],
-//         [2, 1, 3],
-//         [2, 0, 4],
-//       ],
-//     },

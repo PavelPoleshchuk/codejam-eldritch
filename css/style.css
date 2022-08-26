@@ -22,9 +22,10 @@ body {
 .ancients-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  min-width: 40%;
+  min-width: 50%;
   padding: 20px;
 }
 .ancients-container .ancient-card {
@@ -33,8 +34,8 @@ body {
   background-size: contain;
   box-sizing: border-box;
   cursor: pointer;
-  height: 260px;
-  width: 200px;
+  height: 325px;
+  width: 250px;
   transition: all 0.5s;
 }
 .ancients-container .ancient-card:hover {
@@ -83,7 +84,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 30%;
+  /* min-height: 30%; */
   color: rgb(243, 236, 243);
 }
 .deck-container .current-state .stage-container {
@@ -119,8 +120,8 @@ body {
 .deck-container .deck,
 .deck-container .last-card {
   background-size: cover;
-  height: 190px;
-  width: 130px;
+  height: 320px;
+  width: 220px;
 }
 .deck-container .deck {
   background-image: url(/assets/mythicCardBackground.png);
