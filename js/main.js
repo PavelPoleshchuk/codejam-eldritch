@@ -133,12 +133,20 @@ function choiceDifficultyOfDeck(diffNumber, arrDeck, needQtyCard) {
     diff1 = "normal";
     diff2 = "easy";
     diff3 = "hard";
-  } else if (diffNumber > 3) {
+  } else if (diffNumber === 4) {
     diff1 = "normal";
     diff2 = "";
     diff3 = "hard";
-  } else if (diffNumber < 3) {
+  } else if (diffNumber === 2) {
     diff1 = "normal";
+    diff2 = "easy";
+    diff3 = "";
+  } else if (diffNumber === 5) {
+    diff1 = "";
+    diff2 = "";
+    diff3 = "hard";
+  } else if (diffNumber === 1) {
+    diff1 = "";
     diff2 = "easy";
     diff3 = "";
   }
@@ -149,14 +157,27 @@ function choiceDifficultyOfDeck(diffNumber, arrDeck, needQtyCard) {
       item.difficulty === diff2 ||
       item.difficulty === diff3
   );
-  if (diffNumber >3 && arr.length < needQtyCard) {
+  if (diffNumber === 4 && arr.length < needQtyCard) {
     arr2 = arrDeck.filter((item) => item.difficulty === "easy");
     shuffle(arr2);
     while (arr.length < needQtyCard) {
       arr.push(arr2.pop());
     }
-  } else if (diffNumber <3 && arr.length < needQtyCard) {
+  } else if (diffNumber === 2 && arr.length < needQtyCard) {
     arr2 = arrDeck.filter((item) => item.difficulty === "hard");
+    shuffle(arr2);
+    while (arr.length < needQtyCard) {
+      arr.push(arr2.pop());
+    }
+  }
+  if (diffNumber === 5 && arr.length < needQtyCard) {
+    arr2 = arrDeck.filter((item) => item.difficulty === "normal");
+    shuffle(arr2);
+    while (arr.length < needQtyCard) {
+      arr.push(arr2.pop());
+    }
+  } else if (diffNumber === 1 && arr.length < needQtyCard) {
+    arr2 = arrDeck.filter((item) => item.difficulty === "normal");
     shuffle(arr2);
     while (arr.length < needQtyCard) {
       arr.push(arr2.pop());
@@ -252,4 +273,3 @@ function nextCard() {
   } else {
   }
 }
-
