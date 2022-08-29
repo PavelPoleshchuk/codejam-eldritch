@@ -9,7 +9,7 @@ body {
   font-size: 18px;
 }
 .main {
-  background-image: url(./assets/home.png);
+  background-image: url(../assets/home.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -124,7 +124,7 @@ body {
   width: 220px;
 }
 .deck-container .deck {
-  background-image: url(./assets/mythicCardBackground.png);
+  background-image: url(../assets/mythicCardBackground.png);
 }
 .deck-container .deck {
   cursor: pointer;
