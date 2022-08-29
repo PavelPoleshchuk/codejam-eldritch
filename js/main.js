@@ -169,8 +169,7 @@ function choiceDifficultyOfDeck(diffNumber, arrDeck, needQtyCard) {
     while (arr.length < needQtyCard) {
       arr.push(arr2.pop());
     }
-  }
-  if (diffNumber === 5 && arr.length < needQtyCard) {
+  } else if (diffNumber === 5 && arr.length < needQtyCard) {
     arr2 = arrDeck.filter((item) => item.difficulty === "normal");
     shuffle(arr2);
     while (arr.length < needQtyCard) {

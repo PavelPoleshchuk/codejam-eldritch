@@ -112,7 +112,7 @@ body {
   background-color: green;
 }
 .deck-container .current-state .stage-container .dot.brown {
-  background-color: brown;
+  background-color: #937005;
 }
 .deck-container .current-state .stage-container .dot.blue {
   background-color: blue;
